@@ -4,6 +4,7 @@ const authRoutes = require('./routes/authRoute')
 // const cors = require("cors");
 const pool = require("./db");
 const cookieParser = require('cookie-parser')
+const {requireAuth, userLogged} = require('./routes/authMiddleware')
 
 const app = express();
 
@@ -19,8 +20,9 @@ app.set('view engine', 'ejs');
 app.use(express.json())
 // app.use(cookieParser)
 // routes
+app.get('*', userLogged)
 app.get('/', (req, res) => res.render('home'));
-app.get('/smoothies', (req, res) => res.render('smoothies')); 
+app.get('/smoothies', requireAuth, (req, res) => res.render('smoothies')); 
 app.use(authRoutes)
 
 app.use(cookieParser());

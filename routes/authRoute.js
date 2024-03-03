@@ -3,9 +3,10 @@ const pool = require("../db");
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const router = Router()
+const auth = require('./authMiddleware')
 
 const secret = 'mrinal'
-const maxAge = 60*60*2 //(2 mins)
+const maxAge = 60*60 //(60 mins)
 
 router.get('/signup', (req,res) => {
     res.render('signup')
@@ -54,6 +55,11 @@ router.post('/signup', authorise, async(req,res) => {
     // res.end("Completed")
 })
 
+router.get('/logout', (req,res) => {
+    res.cookie('jwt', '', { maxAge: 1})
+    res.redirect('/')
+})
+
 router.get('/login', (req,res) => {
     res.render('login')
 })
@@ -79,7 +85,11 @@ router.post('/login', async(req,res) => {
                 [email]
                 );
                 console.log(id.rows[0].id)
+                const token = createToken(id.rows[0].id)
+                res.cookie('jwt', token, { httpOnly: true, maxAge: maxAge*1000})//cookie timer are in milliseconds while jwt token time are in seconds
                 res.json(id.rows[0].id);
+                // console.log(id.rows[0].id)
+                // res.json(id.rows[0].id);
            }
            else throw Error('Incorrect Password')
 
@@ -92,6 +102,7 @@ router.post('/login', async(req,res) => {
     catch(err) {
         console.error(err.message);
     }
+    
 })
 
 module.exports = router;
