@@ -1,0 +1,11 @@
+CREATE DATABASE nodeauth;
+
+CREATE TABLE nodeauth(
+    email VARCHAR(255) PRIMARY KEY,
+    username VARCHAR(255),
+    password VARCHAR(255)
+);
+
+ALTER TABLE nodeauth ADD id INTEGER AUTO_INCREMENT UNIQUE
+
+ALTER TABLE nodeauth MODIFY COLUMN password VARCHAR(400);
