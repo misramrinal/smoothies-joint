@@ -137,3 +137,46 @@ footer{
   margin-top: 120px;
   color: #aaa;
 }
+
+.container {
+  position: relative;
+  /* width: 200px; Adjust as needed */
+  /* height: 200px; Adjust as needed */
+}
+
+.shake {
+  animation: shake 1s infinite alternate; /* Adjust duration as needed */
+}
+
+body, html {
+  height: 100%;
+  margin: 0;
+  padding: 30;
+}
+
+.container {
+  position: relative;
+  height: 100%;
+}
+
+.bottom-right {
+  position: absolute;
+  bottom: 20%;
+  right: 50%;
+  /* width: 200px; adjust as needed */
+  height: auto; /* maintain aspect ratio */
+}
+
+
+@keyframes shake {
+  0% {
+      transform: translateX(-2px) rotate(-5deg); /* Adjust shaking range and rotation angle as needed */
+  }
+  50% {
+      transform: translateX(2px) rotate(2deg); /* Adjust shaking range and rotation angle as needed */
+  }
+  100% {
+      transform: translateX(-2px) rotate(-2deg); /* Adjust shaking range and rotation angle as needed */
+  }
+}
+
