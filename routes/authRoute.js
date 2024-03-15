@@ -14,7 +14,7 @@ const pool = new Pool({
 });
 pool.on('connect', (client) => {
   client
-  .query('CREATE TABLE IF NOT EXISTS nodeauth (id SERIAL PRIMARY KEY, email VARCHAR(255), username VARCHAR(255), password VARCHAR(400))')
+    .query('CREATE TABLE IF NOT EXISTS nodeauth (id INTEGER AUTO_INCREMENT UNIQUE, email VARCHAR(255) PRIMARY KEY, username VARCHAR(255), password VARCHAR(400))')
     .catch((err) => console.error(err));
 });
 const bcrypt = require('bcrypt')
@@ -23,7 +23,7 @@ const router = Router()
 const auth = require('./authMiddleware')
 
 const secret = 'mrinal'
-const maxAge = 60 //(60 mins)
+const maxAge = 60*60 //(60 mins)
 
 router.get('/signup', (req,res) => {
     res.render('signup')
