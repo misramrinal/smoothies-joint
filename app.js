@@ -1,8 +1,24 @@
 const express = require('express');
-const mongoose = require('mongoose');
 const authRoutes = require('./routes/authRoute')
 // const cors = require("cors");
-const pool = require("./db");
+const keys = require("./db");
+const { Pool } = require('pg');
+const pool = new Pool({
+  user: keys.pgUser,
+  host: keys.pgHost,
+  database: keys.pgDatabase,
+  password: keys.pgPassword,
+  port: keys.pgPort,
+  ssl:
+    process.env.NODE_ENV !== 'production'
+      ? false
+      : { rejectUnauthorized: false },
+});
+pool.on('connect', (client) => {
+  client
+    .query('CREATE TABLE IF NOT EXISTS nodeauth (id SERIAL PRIMARY KEY, email VARCHAR(255), username VARCHAR(255), password VARCHAR(400))')
+    .catch((err) => console.error(err));
+});
 const cookieParser = require('cookie-parser')
 const {requireAuth, userLogged} = require('./routes/authMiddleware')
 
