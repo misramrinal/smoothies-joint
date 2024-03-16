@@ -1,12 +1,13 @@
 version: "3"
 services:
   postgres:
-    image: "postgres:latest"
+    image: "smoothiesjoint.azurecr.io/postgres:latest"
     environment:
       - POSTGRES_PASSWORD=postgres_password
-  server:
+  api:
+    image: "smoothiesjoint.azurecr.io/api:latest"
     build:
-      dockerfile: Dockerfile
+      dockerfile: ./Dockerfile
     volumes:
       - /app/node_modules
       - .:/app
@@ -16,5 +17,13 @@ services:
       - PGDATABASE=postgres
       - PGPASSWORD=postgres_password
       - PGPORT=5432
+  nginx:
+    image: "smoothiesjoint.azurecr.io/nginx:latest"
+    depends_on:
+      - api
+    restart: always
+    build: 
+      dockerfile: ./Dockerfile.dev
+      context: ./nginx
     ports:
-      - "8000:3000"
+      - '8080:80'
