@@ -1,14 +1,19 @@
-version: "3.9"
+version: "3"
 services:
   postgres:
     image: "smoothiesjoint.azurecr.io/postgres:latest"
+    hostname: postgres
     environment:
       - POSTGRES_PASSWORD=postgres_password
   api:
-    image: "smoothiesjoint.azurecr.io/api:latest"
+    # image: "smoothiesjoint.azurecr.io/api:latest"
+    build: 
+      dockerfile: Dockerfile
+      context: .
+    hostname: api
     volumes:
-      -${WEBAPP_STORAGE_HOME}/app/node_modules
-      - ${WEBAPP_STORAGE_HOME}:/app
+      - /app/node_modules
+      - .:/app
     environment:
       - PGUSER=postgres
       - PGHOST=postgres
@@ -16,9 +21,13 @@ services:
       - PGPASSWORD=postgres_password
       - PGPORT=5432
   nginx:
-    image: "smoothiesjoint.azurecr.io/nginx:latest"
+    # image: "smoothiesjoint.azurecr.io/nginx:latest"
+    build: 
+      dockerfile: Dockerfile.dev
+      context: ./nginx
+    hostname: nginx
     depends_on:
       - api
     restart: always
     ports:
-      - '80:80'
+      - '8080:80'
